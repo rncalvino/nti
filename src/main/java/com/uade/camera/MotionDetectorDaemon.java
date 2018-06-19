@@ -60,7 +60,7 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
                 float imageProbability = predictor.predict(bytes);
                 float limitProbability = Float.parseFloat(properties.getProperty("predictor.probability"));
                 
-                notifyObservers(String.format("Se obtuvo una probabilidad de %f para la imagen capturada.", imageProbability));
+                notifyObservers(String.format("P(sospechoso) = %f para la imagen capturada.", imageProbability));
                 setChanged();
                 
                 if(imageProbability > limitProbability) {
