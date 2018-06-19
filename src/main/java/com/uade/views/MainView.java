@@ -3,7 +3,6 @@ package com.uade.views;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
-import javax.swing.JProgressBar;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
@@ -28,15 +27,5 @@ public class MainView extends JFrame {
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);        
-    }
-    
-    public void addProgressBar(JProgressBar progressBar) {
-        
-        this.panel.add(progressBar);
-    }
-    
-    public void removeProgressBar(JProgressBar progressBar) {
-        
-        this.panel.remove(progressBar);
     }
 }

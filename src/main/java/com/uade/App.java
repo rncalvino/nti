@@ -18,7 +18,7 @@ import com.github.sarxos.webcam.Webcam;
 /**
  * Nuevas Tecnologias de la Informacion 
  *
- *
+ * 2018
  */
 
 public class App 
