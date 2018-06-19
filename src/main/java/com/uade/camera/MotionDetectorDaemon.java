@@ -57,18 +57,19 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
                 
                 byte[] bytes = WebcamUtils.getImageBytes(webcam, "jpg");
                 
-                float probability = predictor.predict(bytes);
+                float imageProbability = predictor.predict(bytes);
+                float limitProbability = Float.parseFloat(properties.getProperty("predictor.probability"));
                 
-                notifyObservers(String.format("Se obtuvo una probabilidad de %f para la imagen capturada.", probability));
+                notifyObservers(String.format("Se obtuvo una probabilidad de %f para la imagen capturada.", imageProbability));
                 setChanged();
                 
-                if(probability > Float.parseFloat((String)properties.getProperty("predictor.probability"))) {
+                if(imageProbability > limitProbability) {
                     
-                    notifyObservers("ATENCION: La persona NO cumple cumple con los parametros de seguridad establecidos.");
+                    notifyObservers(String.format("ATENCION: La persona NO cumple cumple con los parametros establecidos: P(sospechoso) > %f", limitProbability));
                     
                 } else {
 
-                    notifyObservers("La persona cumple con los parametros de seguridad establecidos.");
+                    notifyObservers(String.format("La persona cumple con los parametros de seguridad establecidos: P(sospechoso) < %f", limitProbability));
                 }
                 
                 setChanged();

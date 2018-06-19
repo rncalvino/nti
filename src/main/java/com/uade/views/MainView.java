@@ -26,30 +26,30 @@ public class MainView extends JFrame implements Observer {
     
     public MainView(Webcam webcam) {
 
-    	/**
-    	 * Panel superior
-    	 */
-    	
-    	this.topPanel = new JPanel();
-    	this.topPanel.add(new JLabel("Trabajo practico Custom Services"));
-    	
-    	/**
-    	 * Panel inferior
-    	 */
-    	
-    	this.bottomTextArea = new JTextArea();
-    	this.bottomTextArea.setRows(5);
-    	this.bottomTextArea.setColumns(80);
-    	
-    	this.bottomScrollPane = new JScrollPane(this.bottomTextArea);
-    	this.bottomScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    	this.bottomPanel = new JPanel();
-    	this.bottomPanel.add(this.bottomScrollPane);
-    	
-    	/**
-    	 * Panel central
-    	 */
-    	
+        /**
+         * Panel superior
+         */
+        
+        this.topPanel = new JPanel();
+        this.topPanel.add(new JLabel("Camara en vivo:"));
+        
+        /**
+         * Panel inferior
+         */
+        
+        this.bottomTextArea = new JTextArea();
+        this.bottomTextArea.setRows(5);
+        this.bottomTextArea.setColumns(80);
+        
+        this.bottomScrollPane = new JScrollPane(this.bottomTextArea);
+        this.bottomScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.bottomPanel = new JPanel();
+        this.bottomPanel.add(this.bottomScrollPane);
+        
+        /**
+         * Panel central
+         */
+        
         this.webcamPanel = new WebcamPanel(webcam);
         webcamPanel.setFPSDisplayed(true);
         webcamPanel.setDisplayDebugInfo(true);
@@ -67,10 +67,10 @@ public class MainView extends JFrame implements Observer {
         this.setVisible(true);
     }
 
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		
-		this.bottomTextArea.append(String.format("%s: %s %s", new Date().toString(), arg1.toString(), System.lineSeparator()));
-		this.bottomScrollPane.getVerticalScrollBar().setValue(this.bottomScrollPane.getVerticalScrollBar().getMaximum());
-	}
+    @Override
+    public void update(Observable arg0, Object arg1) {
+        
+        this.bottomTextArea.append(String.format("%s: %s %s", new Date().toString(), arg1.toString(), System.lineSeparator()));
+        this.bottomScrollPane.getVerticalScrollBar().setValue(this.bottomScrollPane.getVerticalScrollBar().getMaximum());
+    }
 }
