@@ -16,9 +16,11 @@ import com.uade.views.MainView;
 import com.github.sarxos.webcam.Webcam;
 
 /**
- * Hello world!
+ * Nuevas Tecnologias de la Informacion 
+ *
  *
  */
+
 public class App 
 {
     
@@ -28,13 +30,13 @@ public class App
      * Deteccion de movimiento
      */
     
-    public static void main( String[] args ) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+    public static void main(String[] args ) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         /**
          * Obtengo una referencia de la camara disponible.
          */
         
-        Webcam webcam = Webcam.getDefault();
+        final Webcam webcam = Webcam.getDefault();
         webcam.setViewSize(new Dimension(640, 480));
         webcam.open();
 
@@ -42,7 +44,7 @@ public class App
          * Instancio al predictor configurado (Azure)
          */
         
-        Predictor predictor = getConfiguredPredictor();
+        final Predictor predictor = getConfiguredPredictor();
         
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -51,20 +53,20 @@ public class App
                 try {
                     
                     /**
-                     * Detecto los movimientos de la camara.
-                     */
-                    
-                    Thread motionDetector = new Thread(new MotionDetector(webcam, predictor, logger));
-                    motionDetector.setDaemon(true);
-                    motionDetector.start();
-                    
-                    /**
                      * Muestro la camara en vivo
                      */
                     
-                    MainView mainView = new MainView(webcam);
+                    final MainView mainView = new MainView(webcam);
                     mainView.setLocationRelativeTo(null);
                     mainView.setVisible(true);
+                	
+                    /**
+                     * Detecto los movimientos de la camara.
+                     */
+                    
+                    Thread motionDetector = new Thread(new MotionDetector(mainView, webcam, predictor, logger));
+                    motionDetector.setDaemon(true);
+                    motionDetector.start();
                     
                 } catch (Exception e) {
                     

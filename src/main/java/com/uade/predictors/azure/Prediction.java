@@ -12,7 +12,7 @@ public class Prediction {
         return tagId;
     }
     
-    @JsonSetter("TagId")
+    @JsonSetter("tagId")
     public void setTagId(String tagId) {
         this.tagId = tagId;
     }
@@ -21,7 +21,7 @@ public class Prediction {
         return tagName;
     }
     
-    @JsonSetter("Tag")
+    @JsonSetter("tagName")
     public void setTagName(String tagName) {
         this.tagName = tagName;
     }
@@ -30,7 +30,7 @@ public class Prediction {
         return probability;
     }
     
-    @JsonSetter("Probability")
+    @JsonSetter("probability")
     public void setProbability(float probability) {
         this.probability = probability;
     }
