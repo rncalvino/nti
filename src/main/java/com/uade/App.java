@@ -36,7 +36,7 @@ public class App
     	 * Obtengo la configuracion 
     	 */
     	
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("app.properties"));    	
     	
         /**
