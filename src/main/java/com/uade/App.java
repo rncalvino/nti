@@ -32,6 +32,13 @@ public class App
     
     public static void main(String[] args ) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
+    	/**
+    	 * Obtengo la configuracion 
+    	 */
+    	
+        Properties properties = new Properties();
+        properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("app.properties"));    	
+    	
         /**
          * Obtengo una referencia de la camara disponible.
          */
@@ -44,7 +51,7 @@ public class App
          * Instancio al predictor configurado (Azure)
          */
         
-        final Predictor predictor = getConfiguredPredictor();
+        final Predictor predictor = getConfiguredPredictor(properties);
         
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -61,12 +68,15 @@ public class App
                     mainView.setVisible(true);
                 	
                     /**
-                     * Detecto los movimientos de la camara.
+                     * Detecto los movimientos de la camara en un thread aparte.
                      */
                     
-                    Thread motionDetector = new Thread(new MotionDetectorDaemon(webcam, predictor, logger));
-                    motionDetector.setDaemon(true);
-                    motionDetector.start();
+                    MotionDetectorDaemon daemon = new MotionDetectorDaemon(webcam, properties, predictor, logger);
+                    daemon.addObserver(mainView);
+                    
+                    Thread thread = new Thread(daemon);
+                    thread.setDaemon(true);
+                    thread.start();
                     
                 } catch (Exception e) {
                     
@@ -76,15 +86,12 @@ public class App
         });
     }
     
-    private static Predictor getConfiguredPredictor() {
+    private static Predictor getConfiguredPredictor(Properties properties) {
     
         Predictor predictor = null;
         
         try {
-        
-            Properties properties = new Properties();
-            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("app.properties"));
-            
+
             Class<?> predictorClass = Class.forName(properties.getProperty("predictor.class"));
             Class<?>[] arguments = new Class<?>[2];
             arguments[0] = Properties.class;

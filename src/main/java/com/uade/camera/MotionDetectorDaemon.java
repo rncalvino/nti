@@ -1,6 +1,7 @@
 package com.uade.camera;
 
-import javax.swing.JOptionPane;
+import java.util.Observable;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -11,16 +12,18 @@ import com.github.sarxos.webcam.WebcamMotionListener;
 import com.github.sarxos.webcam.WebcamUtils;
 import com.uade.predictors.Predictor;
 
-public class MotionDetectorDaemon implements Runnable {
+public class MotionDetectorDaemon extends Observable implements Runnable {
 
     private Webcam webcam;
+    private Properties properties;
     private Predictor predictor;
     private Logger logger;
     
     
-    public MotionDetectorDaemon(Webcam webcam, Predictor predictor, Logger logger) {
+    public MotionDetectorDaemon(Webcam webcam, Properties properties, Predictor predictor, Logger logger) {
         
         this.webcam = webcam;
+        this.properties = properties;
         this.predictor = predictor;
         this.logger = logger;
     }
@@ -44,8 +47,9 @@ public class MotionDetectorDaemon implements Runnable {
             
             @Override
             public void motionDetected(WebcamMotionEvent arg0) {
-            
-                logger.info("Actividad detectada.");
+                
+                notifyObservers("Actividad detectada por la camara.");
+                setChanged();
                 
                 /**
                  * Obtengo una captura JPG de la camara y la envio al predictor.
@@ -55,12 +59,19 @@ public class MotionDetectorDaemon implements Runnable {
                 
                 float probability = predictor.predict(bytes);
                 
-                if(probability > 0.5) {
+                notifyObservers(String.format("Se obtuvo una probabilidad de %f para la imagen capturada.", probability));
+                setChanged();
                 
-                    logger.info("La persona no cumple cumple con los parametros de seguridad establecidos.");
+                if(probability > Float.parseFloat((String)properties.getProperty("predictor.probability"))) {
                     
-                    JOptionPane.showMessageDialog(null, "Se ha detectado a una persona con mucha probabilidad de cara tapada!", "Alerta", JOptionPane.INFORMATION_MESSAGE);
+                    notifyObservers("ATENCION: La persona NO cumple cumple con los parametros de seguridad establecidos.");
+                    
+                } else {
+
+                    notifyObservers("La persona cumple con los parametros de seguridad establecidos.");
                 }
+                
+                setChanged();
             }
         });
 
