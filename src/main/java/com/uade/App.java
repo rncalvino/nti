@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import javax.swing.SwingUtilities;
 
-import com.uade.camera.MotionDetector;
+import com.uade.camera.MotionDetectorDaemon;
 import com.uade.predictors.Predictor;
 import com.uade.views.MainView;
 
@@ -64,7 +64,7 @@ public class App
                      * Detecto los movimientos de la camara.
                      */
                     
-                    Thread motionDetector = new Thread(new MotionDetector(mainView, webcam, predictor, logger));
+                    Thread motionDetector = new Thread(new MotionDetectorDaemon(webcam, predictor, logger));
                     motionDetector.setDaemon(true);
                     motionDetector.start();
                     
