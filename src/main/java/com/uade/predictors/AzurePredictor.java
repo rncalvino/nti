@@ -33,19 +33,21 @@ public class AzurePredictor implements Predictor {
         
         float probability = 0;
 
-        this.logger.info("Realizando una llamada a la API de Azure para determinar la probabilidad del Tag.");
+        this.logger.debug("Realizando una llamada a la API de Azure para determinar la probabilidad del Tag.");
         
         Response response = this.performRequest(image);
         
         if(response != null) {
         
-            this.logger.info("La API contesto correctamente. Evaluando probabilidad.");
+            this.logger.debug("La API contesto correctamente. Evaluando probabilidad.");
             
             for(Prediction prediction : response.getPredictions()) {
 
+                this.logger.debug("Se obtuvo el tag " + prediction.getTagName());
+
                 if(prediction.getTagName().equals(this.predictionTag)) {
                     
-                    this.logger.info("Se obtuvo una probabilidad de " + prediction.getProbability());
+                    this.logger.debug("Se obtuvo una probabilidad de " + prediction.getProbability());
                     
                     probability = prediction.getProbability();
                 }
