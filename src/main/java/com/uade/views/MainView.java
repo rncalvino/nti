@@ -20,6 +20,7 @@ public class MainView extends JFrame implements Observer {
 
     private JPanel topPanel;
     private JPanel bottomPanel;
+    private JScrollPane bottomScrollPane;
     private JTextArea bottomTextArea;
     private WebcamPanel webcamPanel;
     
@@ -30,7 +31,7 @@ public class MainView extends JFrame implements Observer {
     	 */
     	
     	this.topPanel = new JPanel();
-    	this.topPanel.add(new JLabel("Nuevas Tecnologias de la Informacion"));
+    	this.topPanel.add(new JLabel("Trabajo practico Custom Services"));
     	
     	/**
     	 * Panel inferior
@@ -40,10 +41,10 @@ public class MainView extends JFrame implements Observer {
     	this.bottomTextArea.setRows(5);
     	this.bottomTextArea.setColumns(80);
     	
-    	JScrollPane scrollPane = new JScrollPane(this.bottomTextArea);
-    	scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    	this.bottomScrollPane = new JScrollPane(this.bottomTextArea);
+    	this.bottomScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     	this.bottomPanel = new JPanel();
-    	this.bottomPanel.add(scrollPane);
+    	this.bottomPanel.add(this.bottomScrollPane);
     	
     	/**
     	 * Panel central
@@ -70,5 +71,6 @@ public class MainView extends JFrame implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		
 		this.bottomTextArea.append(String.format("%s: %s %s", new Date().toString(), arg1.toString(), System.lineSeparator()));
+		this.bottomScrollPane.getVerticalScrollBar().setValue(this.bottomScrollPane.getVerticalScrollBar().getMaximum());
 	}
 }
