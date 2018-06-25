@@ -48,8 +48,7 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
             @Override
             public void motionDetected(WebcamMotionEvent arg0) {
                 
-                notifyObservers("Actividad detectada por la camara.");
-                setChanged();
+                logger.info("Actividad detectada por la camara.");
                 
                 /**
                  * Obtengo una captura JPG de la camara y la envio al predictor.
@@ -60,16 +59,19 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
                 float imageProbability = predictor.predict(bytes);
                 float limitProbability = Float.parseFloat(properties.getProperty("predictor.probability"));
                 
-                notifyObservers(String.format("P(sospechoso) = %f para la imagen capturada.", imageProbability));
-                setChanged();
+                logger.info(String.format("P(sospechoso) = %f para la imagen capturada.", imageProbability));
                 
                 if(imageProbability > limitProbability) {
                     
-                    notifyObservers(String.format("ATENCION: La persona NO cumple cumple con los parametros establecidos: P(sospechoso) > %f", limitProbability));
+                    logger.info(String.format("ATENCION: La persona NO cumple cumple con los parametros establecidos: P(sospechoso) > %f", limitProbability));
+           
+                    notifyObservers(true);
                     
                 } else {
 
-                    notifyObservers(String.format("La persona cumple con los parametros de seguridad establecidos: P(sospechoso) < %f", limitProbability));
+                    logger.info(String.format("La persona cumple con los parametros de seguridad establecidos: P(sospechoso) < %f", limitProbability));
+                    
+                    notifyObservers(false);
                 }
                 
                 setChanged();

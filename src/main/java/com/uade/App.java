@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 
 import com.uade.camera.MotionDetectorDaemon;
+import com.uade.loggin.TextAreaAppender;
 import com.uade.predictors.Predictor;
 import com.uade.views.MainView;
 
@@ -66,7 +67,14 @@ public class App
                     final MainView mainView = new MainView(webcam);
                     mainView.setLocationRelativeTo(null);
                     mainView.setVisible(true);
-                	
+
+                    /**
+                     * Configuro el logger
+                     */
+                    
+                    TextAreaAppender appender = (TextAreaAppender)Logger.getRootLogger().getAppender("textarea");
+                    appender.setMainView(mainView);
+                    
                     /**
                      * Detecto los movimientos de la camara en un thread aparte.
                      */
