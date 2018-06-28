@@ -41,7 +41,7 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
         WebcamMotionDetector detector = new WebcamMotionDetector(this.webcam);
         detector.setAreaThreshold(10);
         detector.setInertia(3000);
-        detector.setInterval(1000);
+        detector.setInterval(3000);
         
         detector.addMotionListener(new WebcamMotionListener() {
             

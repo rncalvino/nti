@@ -107,7 +107,7 @@ public class MainView extends JFrame implements Observer {
                     topPanel.revalidate();
                 }
             }, 
-            1000 
+            2500 
         );
     }
     
