@@ -20,7 +20,7 @@ public class MainView extends JFrame implements Observer {
     private static final long serialVersionUID = 1510807459007481944L;
 
     private JPanel topPanel;
-    private JLabel vivoLabel;
+    private JLabel camaraLabel;
     private JLabel sospechosoLabel;
     private JLabel noSospechosoLabel;
     private JPanel bottomPanel;
@@ -34,10 +34,10 @@ public class MainView extends JFrame implements Observer {
          * Panel superior
          */
 
-        this.vivoLabel = new JLabel();
-        this.vivoLabel.setText("CAMARA 1");
-        this.vivoLabel.setForeground(Color.white);
-        this.vivoLabel.setFont(new Font("Tahoma", Font.BOLD, 32));
+        this.camaraLabel = new JLabel();
+        this.camaraLabel.setText("CAMARA 1");
+        this.camaraLabel.setForeground(Color.white);
+        this.camaraLabel.setFont(new Font("Tahoma", Font.BOLD, 32));
         
         this.sospechosoLabel = new JLabel();
         this.sospechosoLabel.setText("SOSPECHOSO");
@@ -50,7 +50,7 @@ public class MainView extends JFrame implements Observer {
         this.noSospechosoLabel.setFont(new Font("Tahoma", Font.BOLD, 32));
         
         this.topPanel = new JPanel();
-        this.topPanel.add(this.vivoLabel);
+        this.topPanel.add(this.camaraLabel);
         
         /**
          * Panel inferior
@@ -70,10 +70,9 @@ public class MainView extends JFrame implements Observer {
          */
         
         this.webcamPanel = new WebcamPanel(webcam);
-        webcamPanel.setFPSDisplayed(true);
-        webcamPanel.setDisplayDebugInfo(true);
-        webcamPanel.setImageSizeDisplayed(true);
         webcamPanel.setMirrored(true);
+        webcamPanel.setImageSizeDisplayed(true);
+        webcamPanel.setFPSDisplayed(true);
         
         this.setTitle("Nuevas Tecnologias de la Informacion");
         this.setLayout(new BorderLayout());
@@ -90,9 +89,9 @@ public class MainView extends JFrame implements Observer {
     @Override
     public void update(Observable arg0, Object arg1) {
         
-        JLabel label = (boolean)arg1 ? this.sospechosoLabel : this.noSospechosoLabel; 
+        final JLabel label = (Boolean)arg1 ? this.sospechosoLabel : this.noSospechosoLabel; 
         
-        this.topPanel.remove(vivoLabel);
+        this.topPanel.remove(this.camaraLabel);
         this.topPanel.add(label);
         this.topPanel.repaint();
         this.topPanel.revalidate();
@@ -102,12 +101,12 @@ public class MainView extends JFrame implements Observer {
                 @Override
                 public void run() {
                     topPanel.remove(label);
-                    topPanel.add(vivoLabel);
+                    topPanel.add(camaraLabel);
                     topPanel.repaint();
                     topPanel.revalidate();
                 }
             }, 
-            2500 
+            3000 
         );
     }
     

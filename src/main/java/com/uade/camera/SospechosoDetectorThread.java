@@ -10,9 +10,10 @@ import com.github.sarxos.webcam.WebcamMotionDetector;
 import com.github.sarxos.webcam.WebcamMotionEvent;
 import com.github.sarxos.webcam.WebcamMotionListener;
 import com.github.sarxos.webcam.WebcamUtils;
+
 import com.uade.predictors.Predictor;
 
-public class MotionDetectorDaemon extends Observable implements Runnable {
+public class SospechosoDetectorThread extends Observable implements Runnable {
 
     private Webcam webcam;
     private Properties properties;
@@ -20,7 +21,7 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
     private Logger logger;
     
     
-    public MotionDetectorDaemon(Webcam webcam, Properties properties, Predictor predictor, Logger logger) {
+    public SospechosoDetectorThread(Webcam webcam, Properties properties, Predictor predictor, Logger logger) {
         
         this.webcam = webcam;
         this.properties = properties;
@@ -40,8 +41,8 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
         
         WebcamMotionDetector detector = new WebcamMotionDetector(this.webcam);
         detector.setAreaThreshold(10);
-        detector.setInertia(3000);
-        detector.setInterval(3000);
+        detector.setInertia(2000);
+        detector.setInterval(2000);
         
         detector.addMotionListener(new WebcamMotionListener() {
             
@@ -61,20 +62,20 @@ public class MotionDetectorDaemon extends Observable implements Runnable {
                 
                 logger.info(String.format("P(sospechoso) = %f para la imagen capturada.", imageProbability));
                 
+                setChanged();
+                
                 if(imageProbability > limitProbability) {
                     
-                    logger.info(String.format("ATENCION: La persona NO cumple cumple con los parametros establecidos: P(sospechoso) > %f", limitProbability));
+                    logger.info(String.format("ATENCION: La persona es sospechosa porque P(sospechoso) > %f", limitProbability));
            
-                    notifyObservers(true);
+                    notifyObservers(Boolean.TRUE);
                     
                 } else {
 
-                    logger.info(String.format("La persona cumple con los parametros de seguridad establecidos: P(sospechoso) < %f", limitProbability));
+                    logger.info(String.format("La persona NO es sospechosa porque P(sospechoso) < %f", limitProbability));
                     
-                    notifyObservers(false);
+                    notifyObservers(Boolean.FALSE);
                 }
-                
-                setChanged();
             }
         });
 

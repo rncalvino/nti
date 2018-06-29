@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import javax.swing.SwingUtilities;
 
-import com.uade.camera.MotionDetectorDaemon;
+import com.uade.camera.SospechosoDetectorThread;
 import com.uade.loggin.TextAreaAppender;
 import com.uade.predictors.Predictor;
 import com.uade.views.MainView;
@@ -33,13 +33,13 @@ public class App
     
     public static void main(String[] args ) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
-    	/**
-    	 * Obtengo la configuracion 
-    	 */
-    	
+        /**
+         * Obtengo la configuracion 
+         */
+        
         final Properties properties = new Properties();
-        properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("app.properties"));    	
-    	
+        properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("app.properties"));        
+        
         /**
          * Obtengo una referencia de la camara disponible.
          */
@@ -79,11 +79,10 @@ public class App
                      * Detecto los movimientos de la camara en un thread aparte.
                      */
                     
-                    MotionDetectorDaemon daemon = new MotionDetectorDaemon(webcam, properties, predictor, logger);
-                    daemon.addObserver(mainView);
+                    SospechosoDetectorThread motionDetectorThread = new SospechosoDetectorThread(webcam, properties, predictor, logger);
+                    motionDetectorThread.addObserver(mainView);
                     
-                    Thread thread = new Thread(daemon);
-                    thread.setDaemon(true);
+                    Thread thread = new Thread(motionDetectorThread);
                     thread.start();
                     
                 } catch (Exception e) {
